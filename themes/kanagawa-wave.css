@@ -378,3 +378,9 @@ section.no-header {
         display: none;
     }
 }
+
+/* ─── Mermaid ───────────────────────────────────────── */
+section img.mermaid {
+    max-width: 100%;
+    height: auto;
+}

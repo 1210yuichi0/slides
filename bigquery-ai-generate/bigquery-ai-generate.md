@@ -8,8 +8,37 @@ header: ''
 footer: ''
 ---
 
-<script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
-<script>mermaid.initialize({startOnLoad:true});</script>
+<script type="module">
+import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+mermaid.initialize({ startOnLoad: false, theme: 'default' });
+
+const svgToDataURL = (svg) =>
+  'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+
+window.addEventListener('DOMContentLoaded', async () => {
+  const targets = document.querySelectorAll('pre.mermaid');
+  let n = 0;
+  for (const el of targets) {
+    const code = (el.textContent ?? '').replace(/\u00A0/g, ' ').replace(/[\u200B\uFEFF]/g, '').trim();
+    if (!code) continue;
+    const id = (crypto?.randomUUID ? `m-${crypto.randomUUID()}` : `m-${Date.now()}-${n++}`);
+    try {
+      const { svg } = await mermaid.render(id, code);
+      const img = document.createElement('img');
+      img.src = svgToDataURL(svg);
+      img.className = el.className;
+      const style = el.getAttribute('style');
+      if (style) img.setAttribute('style', style);
+      el.replaceWith(img);
+    } catch (e) {
+      const warn = document.createElement('div');
+      warn.style.cssText = 'padding:.5rem;border-left:4px solid #e53935;background:#fdecea;color:#b71c1c;';
+      warn.textContent = `Mermaid error: ${e?.message || e}`;
+      el.replaceWith(warn);
+    }
+  }
+});
+</script>
 
 <!-- _class: lt-title -->
 <!-- _paginate: false -->
@@ -49,13 +78,13 @@ footer: ''
 
 ## ▶︎ 「全レコードをGeminiで評価できたら？」
 
-<div class="mermaid">
+<pre class="mermaid">
 flowchart LR
     DB[(システムDB)]
     AI{生成AI + プロンプト}
     DB -->|分析対象の抽出|AI
     AI -->|評価・属性の付与|DB
-</div>
+</pre>
 
 ---
 
@@ -63,7 +92,7 @@ flowchart LR
 
 ## BigQueryからVertex AI経由でGeminiを呼び出せる関数
 
-<div class="mermaid">
+<pre class="mermaid">
 flowchart LR
     BQ[(BigQueryテーブル)]
     FN[AI.GENERATE関数]
@@ -71,7 +100,7 @@ flowchart LR
     GM{Gemini}
     OUT[(評価結果 型付き)]
     BQ --> FN --> VAI --> GM --> OUT
-</div>
+</pre>
 
 1. **SQLだけで完結** 
     - BigQueryの中で処理実行が完結する
@@ -108,27 +137,26 @@ select text_column, ai_res.score, ai_res.reason from base
 
 # ラベリング後のデータをBIダッシュボードに繋げると
 
-<div class="mermaid">
+<pre class="mermaid">
 flowchart LR
     TXT[/テキスト 非構造化/]
     AI{AI.GENERATE関数}
     TBL[(評価テーブル score列など)]
-    BI[BIダッシュボード
-    Looker Studio]
+    BI[BIダッシュボード]
     TXT --> AI --> TBL --> BI
-</div>
+</pre>
 
   ▶︎ **ネガティブレビューの急増をすぐ検知できる**
 
 <div style="width: 28%; margin: 0 auto;">
-<div class="mermaid">
+<pre class="mermaid">
 %%{init: {'themeVariables': {'xyChart': {'plotColorPalette': '#E85C4C'}}}}%%
 xychart-beta
     title "ネガティブレビュー比率（月次推移）"
     x-axis ["1月", "2月", "3月", "4月", "5月", "6月"]
-    y-axis "ネガ率 (%)" 0 --> 50
+    y-axis "ネガティブ率 (%)" 0 --> 50
     line [20, 30, 16, 39, 13, 10]
-</div>
+</pre>
 </div>
 
 - 4月に急増 → **アラートで即検知・対応できる**
@@ -232,7 +260,7 @@ select
 from customer_reviews
 ```
 
-非構造化テキストが型付きの構造化データに変わる。`sentiment` 列でそのままBIのフィルタ・集計に使える。
+非構造化テキストが型付きの構造化データに変わる。`sentiment` 列でそのままBIのフィルタ・集計に使える
 
 | id | sentiment | confidence_score | key_points |
 |---|---|---|---|
@@ -248,7 +276,7 @@ from customer_reviews
 with user_comments as (
   select 1 as comment_id, 'この記事、非常に参考になりました！ありがとうございます。' as comment_text union all
   select 2, '【限定】スマホで月収100万円！？今すぐこちらのURLをクリック！ http://example.com' union all
-  select 3, 'この作者はバカなのか？レベルが低すぎて話にならない。消えろ。'
+  select 3, 'この作者はアホなのか？レベルが低すぎて話にならない。'
 )
 select
   comment_id,
@@ -260,7 +288,7 @@ select
 from user_comments
 ```
 
-`reason` で判定根拠も取得。`severity` でモデレーション優先度をBI上に可視化できる。
+`reason` で判定根拠も取得。`severity` でモデレーション優先度をBI上に可視化できる
 
 | id | is_anomalous | reason | severity |
 |---|---|---|---|
@@ -272,21 +300,18 @@ from user_comments
 
 # データパイプラインに組み込む
 
-<div class="mermaid">
+<pre class="mermaid">
 flowchart LR
     PM[(プロンプト管理テーブル)]
     SRC[(ソーステーブル)]
     AI{AI.GENERATE関数}
-    DIM[(AI評価
-    ディメンションテーブル)]
+    DIM[(AI評価テーブル)]
     FACT[(ファクトテーブル)]
     BI[BIダッシュボード]
-    PM -->  AI 
+    PM -->  AI
     SRC -->|評価対象データのみ|AI --> DIM --> BI
     FACT --> BI
-
-
-</div>
+</pre>
 
 ## 責務の切り出し
 
