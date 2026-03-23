@@ -4,9 +4,12 @@ theme: kanagawa-wave
 lang: ja
 paginate: true
 html: true
-header: '<script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script><script>mermaid.initialize({startOnLoad:true});</script>'
+header: ''
 footer: ''
 ---
+
+<script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({startOnLoad:true});</script>
 
 <!-- _class: lt-title -->
 <!-- _paginate: false -->
