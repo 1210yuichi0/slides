@@ -63,6 +63,10 @@ npx @marp-team/marp-cli --watch {input}.md --output {output}.html --html --theme
 
 # PDF 出力
 npx @marp-team/marp-cli {input}.md --output {output}.pdf --pdf --theme themes/kanagawa-wave.css
+
+# PDF 出力（Mermaid使用時）
+# --html オプションが必要。ないとスクリプトタグがそのまま表示される
+npx @marp-team/marp-cli {input}.md --output {output}.pdf --pdf --html --allow-local-files --theme themes/kanagawa-wave.css
 ```
 
 ## VS Code

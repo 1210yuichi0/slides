@@ -10,7 +10,7 @@ footer: ''
 
 <script type="module">
 import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
-mermaid.initialize({ startOnLoad: false, theme: 'default' });
+mermaid.initialize({ startOnLoad: false, theme: 'base', themeVariables: { background: 'transparent', mainBkg: 'transparent', nodeBorder: '#7E9CD8', clusterBkg: 'transparent', titleColor: '#DCD7BA', edgeLabelBackground: 'transparent', lineColor: '#7E9CD8', primaryColor: '#2A2A37', primaryTextColor: '#DCD7BA', primaryBorderColor: '#7E9CD8', secondaryColor: '#1F1F28', tertiaryColor: '#16161D' } });
 
 const svgToDataURL = (svg) =>
   'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
@@ -81,7 +81,9 @@ window.addEventListener('DOMContentLoaded', async () => {
 <pre class="mermaid">
 flowchart LR
     DB[(システムDB)]
-    AI{生成AI + プロンプト}
+    AI{生成AI
+    +
+    プロンプト}
     DB -->|分析対象の抽出|AI
     AI -->|評価・属性の付与|DB
 </pre>
@@ -305,7 +307,8 @@ flowchart LR
     PM[(プロンプト管理テーブル)]
     SRC[(ソーステーブル)]
     AI{AI.GENERATE関数}
-    DIM[(AI評価テーブル)]
+    DIM[(AI評価
+    ディメンションテーブル)]
     FACT[(ファクトテーブル)]
     BI[BIダッシュボード]
     PM -->  AI
