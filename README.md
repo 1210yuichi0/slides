@@ -6,7 +6,7 @@
 
 | フォルダ | タイトル | テーマ |
 |---------|---------|--------|
-| [bigquery-ai-generate](./bigquery-ai-generate/) | BigQuery AI.GENERATE関数でDBのレコードを生成AIで評価 | kanagawa-wave |
+| [bigquery-ai-generate](./bigquery-ai-generate/) | データ分析基盤でGeminiを使う話 | kanagawa-wave |
 
 ## テーマ
 
@@ -46,7 +46,7 @@ paginate: true
 ```
 {発表名}/
 ├── {発表名}.md              ← 最終成果物
-├── {発表名}.html            ← ビルド成果物（gitignore対象）
+├── {発表名}.pdf             ← ビルド成果物（gitignore対象）
 ├── images/                  ← 画像ファイル
 ├── docs/                    ← アウトライン・設計書
 └── archive/                 ← 過去バージョン
@@ -61,12 +61,9 @@ npx @marp-team/marp-cli {input}.md --output {output}.html --html --theme themes/
 # ウォッチモード（編集しながらプレビュー）
 npx @marp-team/marp-cli --watch {input}.md --output {output}.html --html --theme themes/kanagawa-wave.css
 
-# PDF 出力
-npx @marp-team/marp-cli {input}.md --output {output}.pdf --pdf --theme themes/kanagawa-wave.css
-
-# PDF 出力（Mermaid使用時）
-# --html オプションが必要。ないとスクリプトタグがそのまま表示される
-npx @marp-team/marp-cli {input}.md --output {output}.pdf --pdf --html --allow-local-files --theme themes/kanagawa-wave.css
+# PDF 出力（推奨）
+# Mermaid使用時も含め、これを標準コマンドとして使う
+npx @marp-team/marp-cli --pdf --html --allow-local-files "{input}.md" -o "{output}.pdf" --theme themes/kanagawa-wave.css --no-stdin
 ```
 
 ## VS Code
