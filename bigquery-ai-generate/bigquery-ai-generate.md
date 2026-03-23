@@ -81,9 +81,7 @@ window.addEventListener('DOMContentLoaded', async () => {
 <pre class="mermaid">
 flowchart LR
     DB[(システムDB)]
-    AI{生成AI
-    +
-    プロンプト}
+    AI{生成AI}
     DB -->|分析対象の抽出|AI
     AI -->|評価・属性の付与|DB
 </pre>
