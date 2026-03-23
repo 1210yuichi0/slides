@@ -1,0 +1,14 @@
+{
+  "markdown.marp.themes": [
+    "./themes/kanagawa-wave.css",
+    "./themes/classmethod.css"
+  ],
+  "markdown.marp.html": "all",
+  "css.lint.unknownProperties": "ignore",
+  "files.associations": {
+    "*.md": "markdown"
+  },
+  "workbench.editorAssociations": {
+    "*.md": "vscode.markdown.preview.editor"
+  }
+}
