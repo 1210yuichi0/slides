@@ -4,4 +4,5 @@ node_modules/
 *.html
 !bigquery-ai-generate/archive/*.pdf
 !bigquery-ai-generate/archive/*.html
-.claude/settings.local.json
+.claude/
+.vscode/
