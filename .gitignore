@@ -1,0 +1,7 @@
+node_modules/
+.DS_Store
+*.pdf
+*.html
+!bigquery-ai-generate/archive/*.pdf
+!bigquery-ai-generate/archive/*.html
+.claude/settings.local.json
